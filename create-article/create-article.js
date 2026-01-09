@@ -5,10 +5,11 @@
 */
 
 /* -------------------- Configuration -------------------- */
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 const SUPABASE_URL = "https://roqlhnyveyzjriawughf.supabase.co";
-const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcWxobnl2ZXl6anJpYXd1Z2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3ODUwNTQsImV4cCI6MjA3NTM2MTA1NH0.VPie8b5quLIeSc_uEUheJhMXaupJWgxzo3_ib3egMJk";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcWxobnl2ZXl6anJpYXd1Z2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3ODUwNTQsImV4cCI6MjA3NTM2MTA1NH0.VPie8b5quLIeSc_uEUheJhMXaupJWgxzo3_ib3egMJk";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const IMAGE_BUCKET = "Images";
-const supabase = window.supabase?.createClient ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
 const AUTOSAVE_MS = 5000; // 5 seconds
 
 /* -------------------- DOM references -------------------- */
@@ -32,6 +33,7 @@ const tableBtn = document.getElementById("tableBtn");
 const tableMenu = document.getElementById("tableMenu");
 const tableGrid = document.getElementById("tableGrid");
 const gridHint = document.getElementById("gridHint");
+const editors = document.getElementById("editors");
 
 /* -------------------- Local state -------------------- */
 let savedRange = null;              // last saved Range (clone)
@@ -972,33 +974,14 @@ async function handleDocImport(file) {
 
 if (docImport) docImport.addEventListener('change', (ev) => { const f = ev.target.files?.[0]; if (f) handleDocImport(f).finally(()=> docImport.value=''); });
 
-/* -------------------- Auth, drafts, autosave & publish -------------------- */
-async function getSessionUser() {
-  if (!supabase) return null;
-  const { data } = await supabase.auth.getSession();
-  return data?.session?.user ?? null;
-}
-async function checkAuthAndRole() {
-  const user = await getSessionUser();
-  if (!user) { window.location.href = '/'; return false; }
-  currentUser = user;
-  try {
-    const { data, error } = await supabase.from('user_roles').select('role').eq('user_id', currentUser.id);
-    if (error) throw error;
-    if (!data || data.length === 0) { alert('Access denied'); window.location.href = '/'; return false; }
-    if (!data.some(r => r.role === 'Writer' || r.role === 'Admin')) { alert('Access denied'); window.location.href = '/'; return false; }
-  } catch (err) { console.error(err); alert('Permission check failed'); return false; }
-  return true;
-}
-
 async function loadDraft() {
   if (!currentDraftId) {
     try {
       const payload = {
         html: '<h1>Untitled</h1><p></p>',
         updated_at: new Date().toISOString(),
-        user_id: currentUser.id,
-        title_image: null
+        title_image: null,
+        editors: null
       };
       const { data, error } = await supabase
         .from('articles_in_progress')
@@ -1018,7 +1001,7 @@ async function loadDraft() {
   try {
     const { data, error } = await supabase
       .from('articles_in_progress')
-      .select('id, html, updated_at, title_image')
+      .select('id, html, updated_at, title_image, editors')
       .eq('id', currentDraftId)
       .single();
 
@@ -1045,6 +1028,8 @@ async function loadDraft() {
       uploadText.textContent = '📸 Upload or Drop Title Image';
     }
 
+    editors.value = data.editors;
+
     setStatus('Loaded');
     setLastSaved(data.updated_at);
     autoLinkifyInEditor();
@@ -1066,8 +1051,8 @@ async function saveDraft() {
     const payload = {
       html: savedHtml,
       updated_at: new Date().toISOString(),
-      user_id: currentUser.id,
-      title_image: window.titleImage || null   // 💬 add image field
+      title_image: window.titleImage || null,   // 💬 add image field
+      editors: editors.value
     };
 
     if (!currentDraftId) {
@@ -1085,7 +1070,8 @@ async function saveDraft() {
         .update({
           html: savedHtml,
           updated_at: payload.updated_at,
-          title_image: payload.title_image   // 💬 also update image
+          title_image: payload.title_image,
+          editors: editors.value
         })
         .eq('id', currentDraftId);
       if (error) throw error;
@@ -1102,17 +1088,10 @@ async function saveDraft() {
 }
 
 function scheduleQuickSave(){ if (quickSaveTimer) clearTimeout(quickSaveTimer); quickSaveTimer = setTimeout(()=>saveDraft(), 700); }
-function scheduleImmediateSave(){ setTimeout(()=>saveDraft(), 90); }
 
 /* Autosave + save on close */
 setInterval(()=>saveDraft(), AUTOSAVE_MS);
 window.addEventListener('beforeunload', ()=>{ try { saveDraft(); } catch(_) {} });
-
-async function publisher() {
-  alert('the current solution is temporary while a better one is in progress');
-  const { data } = await supabase.from('profiles').select('id').eq('display_name', prompt('Who is the publisher? (First and Last Name or name on the google account they used to create their profile)'))
-  return data[0].id;
-}
 
 async function publishArticle() {
   try {
@@ -1126,9 +1105,9 @@ async function publishArticle() {
       {
         created_at: new Date().toISOString(),
         visits: 0,
-        user_id: await publisher(),
         html: savedHtml,
         title_image: window.titleImage,
+        editors: editors.value,
       },
     ]);
 
@@ -1379,45 +1358,12 @@ editor.addEventListener('keydown', (ev) => {
   }
 });
 
-/* -------------------- Remaining helpers used elsewhere -------------------- */
-function autoLinkifyInEditor(){ /* ...defined earlier above, kept */ 
-  if (!editor) return;
-  const urlRegex = /(?:(https?:\/\/)[^\s<]+)/g;
-  const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT, null, false);
-  const nodes = [];
-  while (walker.nextNode()) nodes.push(walker.currentNode);
-  nodes.forEach(tn => {
-    if (!tn.nodeValue) return;
-    const parent = tn.parentNode;
-    if (parent && parent.nodeName === 'A') return;
-    const matches = tn.nodeValue.match(urlRegex);
-    if (!matches) return;
-    const html = tn.nodeValue.replace(urlRegex, url => `<a href="${url}" target="_blank" rel="noopener">${url}</a>`);
-    const frag = document.createRange().createContextualFragment(html);
-    parent.replaceChild(frag, tn);
-  });
-}
 
 /* -------------------- Initialization -------------------- */
 (async function init(){
   setStatus('Loading…');
   const ok = await checkAuthAndRole();
   if (!ok) return;
-
-  // create initial draft if needed (keeps previous behavior)
-  if (!currentDraftId) {
-    try {
-      const payload = { html: '<h1>Untitled</h1><p></p>', updated_at: new Date().toISOString(), user_id: currentUser.id };
-      const { data, error } = await supabase.from('articles_in_progress').insert([payload]).select('id').single();
-      if (error) throw error;
-      currentDraftId = data.id;
-      localStorage.setItem('editingArticleId', currentDraftId);
-    } catch (err) {
-      console.error('create initial draft failed', err);
-      alert('Failed to create a draft');
-      return;
-    }
-  }
 
   await loadDraft();
   setStatus('Ready');

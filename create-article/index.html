@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="./create-article.css" />
   <link rel="icon" type="image/png" href="/favicon.png">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://unpkg.com/docx-preview@0.1.15/dist/docx-preview.min.js"></script>
   <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 
@@ -107,11 +106,12 @@
       </div>
     </div>
 
-    <input id="titleInput" class="title-input" placeholder="Article title (separate box)" />
+    <input id="titleInput" class="input" placeholder="Article title" />
+        <input id="editors" class="input" placeholder="Editors" />
 
     <main id="editor" class="editor" contenteditable="true"></main>
   </div>
 
-  <script src="./create-article.js"></script>
+  <script type="module" src="./create-article.js"></script>
 </body>
 </html>

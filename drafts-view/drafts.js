@@ -4,10 +4,10 @@
    - Create New immediately inserts a draft and opens editor
    - Uses example Supabase project/key (anon)
 */
-
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 const SUPABASE_URL = "https://roqlhnyveyzjriawughf.supabase.co";
-const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcWxobnl2ZXl6anJpYXd1Z2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3ODUwNTQsImV4cCI6MjA3NTM2MTA1NH0.VPie8b5quLIeSc_uEUheJhMXaupJWgxzo3_ib3egMJk";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcWxobnl2ZXl6anJpYXd1Z2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3ODUwNTQsImV4cCI6MjA3NTM2MTA1NH0.VPie8b5quLIeSc_uEUheJhMXaupJWgxzo3_ib3egMJk";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const myDraftsEl = document.getElementById("myDrafts");
 const otherDraftsEl = document.getElementById("otherDrafts");

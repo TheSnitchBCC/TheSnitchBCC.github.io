@@ -1,5 +1,4 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
 const SUPABASE_URL = 'https://roqlhnyveyzjriawughf.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcWxobnl2ZXl6anJpYXd1Z2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3ODUwNTQsImV4cCI6MjA3NTM2MTA1NH0.VPie8b5quLIeSc_uEUheJhMXaupJWgxzo3_ib3egMJk'
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
@@ -17,7 +16,6 @@ adminActionsContainer.style.marginTop = '2rem'
 articleEl.parentNode.insertBefore(adminActionsContainer, returnHomeBtn)
 
 let currentUser = null
-let userRole = null // 'Writer' | 'Admin' | null
 
 returnHomeBtn.addEventListener('click', () => (window.location.href = '/'))
 
@@ -34,7 +32,7 @@ if (!articleId) {
 async function loadArticle() {
   try {
     const { data: article, error } = await supabase
-      .from('articles_with_authors')
+      .from('articles')
       .select('*')
       .eq('id', articleId)
       .maybeSingle()
@@ -49,7 +47,7 @@ async function loadArticle() {
     const { title, cleanedHtml } = extractAndCleanArticle(article.html)
 
     titleEl.textContent = title
-    authorEl.textContent = `By ${article.author_name || 'Anonymous'}`
+    authorEl.textContent = `${article.editors || 'Anonymous'}`
     dateEl.textContent = ` · ${new Date(article.created_at).toLocaleDateString()}`
     viewsEl.textContent = ` · ${article.visits || 0} views`
     articleEl.innerHTML = cleanedHtml
@@ -101,8 +99,6 @@ async function checkAdminAndRenderDelete(articleId) {
 
     if (rolesErr || !rolesData) return
     if (!rolesData.some(r => r.role === 'Admin')) return // not admin
-
-    userRole = 'Admin'
 
     // Render delete button
     const deleteBtn = document.createElement('button')

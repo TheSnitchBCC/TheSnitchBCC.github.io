@@ -2,12 +2,10 @@
 // main.js — The Snitch Homepage
 // =============================
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
 // === Supabase Setup ===
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 const SUPABASE_URL = 'https://roqlhnyveyzjriawughf.supabase.co'
-const SUPABASE_ANON_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcWxobnl2ZXl6anJpYXd1Z2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3ODUwNTQsImV4cCI6MjA3NTM2MTA1NH0.VPie8b5quLIeSc_uEUheJhMXaupJWgxzo3_ib3egMJk'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcWxobnl2ZXl6anJpYXd1Z2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3ODUwNTQsImV4cCI6MjA3NTM2MTA1NH0.VPie8b5quLIeSc_uEUheJhMXaupJWgxzo3_ib3egMJk'
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 // === DOM Elements ===
@@ -195,7 +193,7 @@ async function loadPublishedArticles() {
     if (newsGrid) newsGrid.innerHTML = '<p class="no-results">Loading articles...</p>'
 
     const { data: articles, error } = await supabase
-      .from('articles_with_authors')
+      .from('articles')
       .select('*')
       .not('html', 'is', null)
       .order('created_at', { ascending: false })
@@ -244,14 +242,14 @@ function renderHero(heroArticle) {
     </div>
     <div class="hero-text" onclick="window.location.href='/article-view/?id=${heroArticle.id}'">
       <h2>${title}</h2>
-      <div class="meta">${heroArticle.author_name} · ${formattedDate(heroArticle)} · ${heroArticle.visits || 0} views</div>
+      <div class="meta">${heroArticle.editors || "Anonymous"} · ${formattedDate(heroArticle)} · ${heroArticle.visits || 0} views</div>
     </div>
   `
 }
 
 function renderTrending(trending) {
   if (!trending || !trending.length) {
-    trendingList.innerHTML = '<li class="no-results">No trending articles</li>'
+    document.querySelector('.trending').style.display = 'none';
     return
   }
   trendingList.innerHTML = trending
@@ -326,7 +324,7 @@ async function renderMasonry(items) {
       </div>
       <div class="card-content">
         <h3>${escapeHtml(extractTitle(article.html))}</h3>
-        <div class="meta"> ${article.author_name} · ${formattedDate(article)} · ${article.visits || 0} views</div>
+        <div class="meta"> ${article.editors || "Anonymous"} · ${formattedDate(article)} · ${article.visits || 0} views</div>
       </div>
     `
     cols[minIdx].el.appendChild(card)

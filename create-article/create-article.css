@@ -95,9 +95,21 @@ body {
 .grid-hint { margin-top:6px; font-size:12px; color:var(--muted); }
 
 /* title + editor */
-.title-input {
-  width:100%; padding:12px; border-radius:var(--radius);
-  border:1px solid rgba(255,255,255,0.1); background:var(--card); color:var(--text); font-size:20px; margin:14px 0;
+.input {
+  width:100%; padding:12px; 
+  border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,0.1); 
+  background:var(--card); 
+  color:var(--text);
+}
+
+#titleInput {
+  font-size:20px; 
+}
+
+#editors {
+  font-size: 10;
+  margin:14px 0;
 }
 
 .editor {
