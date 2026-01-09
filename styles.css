@@ -45,7 +45,12 @@ header {
   margin: 0;
 }
 
-nav a, nav button {
+#nav {
+  display: flex;
+  align-items: center;
+}
+
+nav button {
   all: unset;
   color: var(--text);
   text-decoration: none;
@@ -54,7 +59,20 @@ nav a, nav button {
   cursor: pointer;
 }
 
-nav a:hover, nav button:hover { color: var(--accent); }
+nav button:hover { 
+  color: var(--accent); 
+}
+
+nav img {
+  margin-left: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+nav a {
+  width: 20px;
+  height: 20px;
+}
 
 /* MAIN LAYOUT */
 .layout {
