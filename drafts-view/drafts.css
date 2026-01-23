@@ -43,28 +43,28 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-famil
     transition:all 0.2s ease
 }
 
-.item:hover{
+.item:hover {
     border-color:rgba(255,255,255,0.1);
     background:var(--card)
 }
 
-.item:hover .title{
+.item:hover .title {
     color:var(--accent)
 }
 
-.item .content{
+.item .content {
     display:flex;
     justify-content:space-between;
     align-items:center;
     gap:24px
 }
 
-.item .info{
+.item .info {
     min-width:0;
     flex:1
 }
 
-.item .title{
+.item .title {
     font-size:15px;
     margin-bottom:4px;
     color:var(--text);
@@ -73,7 +73,7 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-famil
     text-overflow:ellipsis
 }
 
-.item .meta{
+.item .meta {
     font-size:13px;
     color:var(--muted);
     display:flex;
@@ -81,7 +81,7 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-famil
     gap:16px
 }
 
-.remove-btn{
+.remove-btn {
     background:transparent;
     color:#ff4444;
     border:1px solid rgba(255,68,68,0.3);
@@ -93,17 +93,17 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-famil
     transition:all 0.2s ease
 }
 
-.remove-btn:hover{
+.remove-btn:hover {
     opacity:1;
     background:rgba(255,68,68,0.1);
     border-color:rgba(255,68,68,0.6)
 }
 
-@keyframes fadeOut{
+@keyframes fadeOut {
     from{opacity:1;transform:translateY(0)}
     to{opacity:0;transform:translateY(-10px)}
 }
-.item .remove-btn{
+.item .remove-btn {
     padding: 4px 8px;
     border-radius: 6px;
     border: 1px solid rgba(255,255,255,0.1);
@@ -113,12 +113,16 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-famil
     font-size: 0.9em;
     transition: all 0.2s ease;
 }
-.item .remove-btn:hover{
+.item .remove-btn:hover {
     background: rgba(255,0,0,0.2);
     transform: translateY(-1px);
 }
 .msg{color:var(--muted);font-size:0.95rem;padding:8px}
-@media (min-width:900px){ .lists{grid-template-columns:1fr 1fr} }
+@media (min-width:900px) { 
+    .lists{
+        grid-template-columns:1fr 1fr
+    } 
+}
 
 @keyframes fadeOut {
     from { opacity: 1; transform: translateX(0); }

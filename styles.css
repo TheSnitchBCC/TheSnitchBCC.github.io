@@ -20,14 +20,20 @@ html, body {
   background: var(--bg);
   font-family: var(--font);
   color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+}
+
+body {
+  overflow: hidden;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 /* HEADER */
@@ -35,7 +41,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px 10px;
   border-bottom: 1px solid #334155;
 }
 
