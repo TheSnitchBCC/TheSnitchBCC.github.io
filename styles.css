@@ -33,7 +33,7 @@ body {
 }
 
 #innerContainer {
-  max-width: 81vw;
+  max-width: max(1200px, 81vw);
   padding: 20px;
 }
 

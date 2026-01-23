@@ -33,63 +33,61 @@
 
     <body>
         <div id="outerContainer" class="container">
-        <div id="innerContainer" class="container">
-            <header>
-                <div class="brand">
-                    <h1>The Snitch</h1>
-                </div>
-                <nav id="nav">
-                    <button id="login">Log In</button>
-                    <button id="account" style="display: none;">Account</button>
-                    <button id="admin" style="display: none;">Admin Dashboard</button>
-                    <button id="writer" style="display: none;">Create New Article</button>
-                    <a href="http://instagram.com/bccsnitch/" style="margin-right: 15px;" target="_blank">
-                        <img src = /instagramIcon.png alt = "Instagram Link">
-                    </a>
-                </nav>
-            </header>
+            <div id="innerContainer" class="container">
+                <header>
+                    <div class="brand">
+                        <h1>The Snitch</h1>
+                    </div>
+                    <nav id="nav">
+                        <button id="login">Log In</button>
+                        <button id="account" style="display: none;">Account</button>
+                        <button id="admin" style="display: none;">Admin Dashboard</button>
+                        <button id="writer" style="display: none;">Create New Article</button>
+                        <a href="http://instagram.com/bccsnitch/" style="margin-right: 15px;" target="_blank">
+                            <img src = /instagramIcon.png alt = "Instagram Link">
+                        </a>
+                    </nav>
+                </header>
             
-            <main class="layout"> 
-                <section class="main-content"> 
-                    <!-- Hero Story --> 
-                    <div class="hero"> </div> 
-                    <!-- Grid of News --> 
-                    <div class="news-grid"></div> 
-                </section> 
-                <!-- Search + Trending --> 
-                <aside class="sidebar"> 
-                    <div class="search-box"> 
-                        <input id = 'search-box-input' type="text" placeholder="Search headlines..."> 
-                    </div> 
-                    <div class="trending"> 
-                        <h3>Trending</h3> 
-                        <ul></ul> 
-                    </div> 
-                </aside> 
-            </main>
+                <main class="layout"> 
+                    <section class="main-content"> 
+                        <!-- Hero Story --> 
+                        <div class="hero"> </div> 
+                        <!-- Grid of News --> 
+                        <div class="news-grid"></div> 
+                    </section> 
+                    <!-- Search + Trending --> 
+                    <aside class="sidebar"> 
+                        <div class="search-box"> 
+                            <input id = 'search-box-input' type="text" placeholder="Search headlines..."> 
+                        </div> 
+                        <div class="trending"> 
+                            <h3>Trending</h3> 
+                            <ul></ul> 
+                        </div> 
+                    </aside> 
+                </main>
 
-            <!--sidebar-->
-            <div id="overlay" class="overlay"></div>
+                <!--sidebar-->
+                <div id="overlay" class="overlay"></div>
 
-            <aside class="account-sidebar" id="accountSidebar">
-                <button class="close-btn" id="closeSidebar">×</button>
-                
-                <div class="account-header">
-                    <img id = "avatar" alt="User Avatar" class="avatar">
-                    <h2>My Account</h2>
-                    <p class="email" id="userEmail"></p>
-                </div>
-                <button class="logout-btn" id="logout">Sign Out</button>
-            </aside>
-
+                <aside class="account-sidebar" id="accountSidebar">
+                    <button class="close-btn" id="closeSidebar">×</button>
+                    
+                    <div class="account-header">
+                        <img id = "avatar" alt="User Avatar" class="avatar">
+                        <h2>My Account</h2>
+                        <p class="email" id="userEmail"></p>
+                    </div>
+                    <button class="logout-btn" id="logout">Sign Out</button>
+                </aside>
             
-            
-            <!--footer-->
-            <footer>
-                <p>© 2025 The Snitch · America's Finest News Source</p>
-            </footer>
+                <!--footer-->
+                <footer>
+                    <p>© 2025 The Snitch · America's Finest News Source</p>
+                </footer>
 
-        </div>
+            </div>
         </div>
 
         <script type="module" src="./main.js"></script>
